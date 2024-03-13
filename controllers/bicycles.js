@@ -75,6 +75,7 @@ const getAllBicycles = async (req, res) => {
 
     res.status(200).json({
         size: bicycles.length,
+        page,
         hasNextPage: getAllData.length >= (page * limit) ? true : false,
         bicycles
     })
