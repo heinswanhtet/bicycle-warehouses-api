@@ -1,7 +1,7 @@
 const Bicycle = require('../models/Bicycle')
 
 const getAllBicycles = async (req, res) => {
-    const { featured, company } = req.query
+    const { featured, company, name } = req.query
     const queryObject = {}
 
     if (featured) {
@@ -10,6 +10,10 @@ const getAllBicycles = async (req, res) => {
 
     if (company) {
         queryObject.company = company
+    }
+
+    if (name) {
+        queryObject.name = { $regex: name, $options: 'i' }
     }
 
     const bicycles = await Bicycle.find(queryObject)
