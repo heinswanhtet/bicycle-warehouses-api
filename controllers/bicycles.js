@@ -69,9 +69,15 @@ const getAllBicycles = async (req, res) => {
     const skip = (page - 1) * limit
     result = result.skip(skip).limit(limit)
 
+    const getAllData = await Bicycle.find({})
+
     const bicycles = await result
 
-    res.status(200).json({ size: bicycles.length, bicycles })
+    res.status(200).json({
+        size: bicycles.length,
+        hasNextPage: getAllData.length >= (page * limit) ? true : false,
+        bicycles
+    })
 }
 
 module.exports = getAllBicycles
