@@ -1,7 +1,7 @@
 const Bicycle = require('../models/Bicycle')
 
 const getAllBicycles = async (req, res) => {
-    const { featured, company, name, released_date, sort } = req.query
+    const { featured, company, name, released_date, sort, fields } = req.query
     const queryObject = {}
 
     if (featured) {
@@ -30,6 +30,12 @@ const getAllBicycles = async (req, res) => {
     // default sorting
     else {
         result = result.sort('createdAt')
+    }
+
+    // selecting
+    if (fields) {
+        const newFieldsList = fields.replace(/\s/g, '').split(',').join(' ')
+        result = result.select(newFieldsList)
     }
 
     const bicycles = await result
