@@ -1,7 +1,7 @@
 const Bicycle = require('../models/Bicycle')
 
 const getAllBicycles = async (req, res) => {
-    const { featured, company, name, released_date, sort, fields } = req.query
+    const { featured, company, name, released_date, sort, fields, numericFilters } = req.query
     const queryObject = {}
 
     if (featured) {
@@ -20,6 +20,31 @@ const getAllBicycles = async (req, res) => {
         queryObject.released_date = { $gt: new Date(released_date) }
     }
 
+    if (numericFilters) {
+        const operatorMap = {
+            '=': '$eq',
+            '>': '$gt',
+            '>=': '$gte',
+            '<': '$lt',
+            '<=': '$lte',
+        }
+        // first removing spaces
+        let filters = numericFilters.replace(/\s/g, '')
+        const regEx = /\b(=|>|>=|<|<=)\b/g
+        filters = filters.replace(
+            regEx,
+            (match) => `-${operatorMap[match]}-`
+        )
+        const options = ['price', 'rating']
+        filters = filters.split(',').forEach((item) => {
+            const [field, operator, value] = item.split('-')
+            if (options.includes(field)) {
+                queryObject[field] = { [operator]: Number(value) }
+            }
+        })
+
+    }
+    // console.log(queryObject)
     let result = Bicycle.find(queryObject)
 
     // sorting
