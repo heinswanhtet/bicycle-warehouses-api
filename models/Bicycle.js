@@ -17,7 +17,7 @@ const bicycleSchema = new mongoose.Schema({
         type: Number,
         default: 2.5
     },
-    released: {
+    released_date: {
         type: Date,
         required: [true, 'bicycle release date must be provided']
     },
@@ -30,7 +30,7 @@ const bicycleSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date().now()
+        default: Date.now()
     }
 })
 
