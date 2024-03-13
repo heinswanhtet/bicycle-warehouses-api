@@ -34,4 +34,4 @@ const bicycleSchema = new mongoose.Schema({
     }
 })
 
-module.exports = bicycleSchema
+module.exports = mongoose.model('Bicycle', bicycleSchema)
